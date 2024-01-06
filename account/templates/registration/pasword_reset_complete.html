@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Сброс пароля{% endblock %}
+
+{% block content %}
+    <h1>Пароль установлен</h1>
+    <p>Пароль установлен.
+        Теперь можно <a href="{% url 'login' %}">выполнить вход</a>.</p>
+{% endblock %}

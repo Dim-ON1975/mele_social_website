@@ -1,0 +1,55 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+</head>
+<body>
+    <div id="header">
+        <span class="logo">Закладки</span>
+        <!-- Проверка: аутентифицирован пользователь или нет.
+        Добавление меню личного кабинета в случае успешной аутентификации.
+        Добавление ссылок на страницы входа и выхода в зависимости от ситуации.-->
+        {% if request.user.is_authenticated %}
+            <ul class="menu">
+                <li {% if section == 'dashboard' %}class="selected"{% endif %}>
+                    <a href="{% url 'dashboard' %}">Моя панель инструментов</a>
+                </li>
+                <li {% if section == 'images' %}class="selected"{% endif %}>
+                    <a href='#'>Изображения</a>
+                </li>
+                <li {% if section == 'people' %}class="selected"{% endif %}>
+                    <a href='#'>Люди</a>
+                </li>
+            </ul>
+        {% endif %}
+        <span class="user">
+            {% if request.user.is_authenticated %}
+                Здравствуйте, {{ request.user.first_name|default:request.user.username }}.
+                <a href="{% url 'logout' %}">Выход</a>.
+            {% else %}
+                <a href="{% url 'login' %}">Аутентификация</a>
+            {% endif %}
+        </span>
+        <!-- Конец проверки: меню и ссылки добавлены.-->
+    </div>
+    <!-- Добавление фреймворка сообщений -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{{ message.tags }}">
+                    {{ message|safe }}
+                    <a href="#" class="close">x</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <!-- Конец фреймворка сообщений -->
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
